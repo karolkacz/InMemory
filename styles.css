@@ -379,12 +379,11 @@ body.lightbox-open {
 /* Video Section */
 .video-wrapper {
     position: relative;
-    padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
-    height: 0;
-    overflow: hidden;
-    max-width: 100%;
+    width: 100%;
+    aspect-ratio: 16 / 9;
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     background: #000;
 }
 
