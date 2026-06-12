@@ -179,11 +179,13 @@ function initLightbox() {
         item.addEventListener('click', () => {
             showImage(index);
             lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
         });
     });
 
     const closeLightbox = () => {
         lightbox.classList.remove('active');
+        document.body.style.overflow = '';
         setTimeout(() => {
             lightboxImg.src = '';
         }, 300);
