@@ -560,24 +560,41 @@ body {
 /* Responsive adjustments */
 @media (max-width: 480px) {
     .memorial-name {
-        font-size: 2rem;
+        font-size: 1.7rem;
+    }
+    .avatar-container {
+        width: 120px;
+        height: 120px;
+        margin-bottom: 16px;
     }
     .gallery-grid {
         grid-template-columns: repeat(2, 1fr);
     }
     .section {
-        padding: 24px 20px;
-        border-radius: 16px;
+        padding: 16px 12px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+    }
+    .section-title {
+        font-size: 1.25rem;
+        margin-bottom: 16px;
+    }
+    .epitaph {
+        font-size: 1.15rem;
+        padding: 10px 5px;
+    }
+    .bio-text {
+        font-size: 0.95rem;
     }
     .hero {
-        padding-top: 80px;
-        min-height: 380px;
+        padding-top: 60px;
+        min-height: 320px;
     }
     .lightbox-arrow {
-        font-size: 2rem;
-        padding: 15px;
+        font-size: 1.8rem;
+        padding: 10px;
     }
     .footer {
-        padding: 40px 20px;
+        padding: 30px 15px;
     }
 }
