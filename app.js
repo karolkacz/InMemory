@@ -203,7 +203,7 @@ function initLightbox() {
     });
 
     lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox || e.target === lightboxImg) {
+        if (e.target === lightbox) {
             closeLightbox();
         }
     });
