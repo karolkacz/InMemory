@@ -255,24 +255,25 @@ function initLightbox() {
     };
 }
 
-/* Custom Video Play Logic (Clean Custom Poster -> Autoplay YouTube) */
+/* Custom Video Play Logic */
 function initVideoPlay() {
     const videoWrapper = document.getElementById('video-wrapper');
     if (!videoWrapper) return;
 
-    const poster = videoWrapper.querySelector('.video-poster');
-    if (!poster) return;
+    videoWrapper.addEventListener('click', () => {
+        const img = videoWrapper.querySelector('.video-thumbnail');
+        const wrapperHeight = img ? img.offsetHeight : videoWrapper.offsetHeight;
 
-    poster.addEventListener('click', () => {
+        videoWrapper.style.height = wrapperHeight + 'px';
+        videoWrapper.style.position = 'relative';
         videoWrapper.innerHTML = `
             <iframe 
-                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
                 src="https://www.youtube.com/embed/MllCZ9eZk2I?autoplay=1&rel=0&modestbranding=1" 
                 title="Wspomnienie wideo" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen>
+                allowfullscreen
+                style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;">
             </iframe>
         `;
-        videoWrapper.style.position = 'relative';
     });
 }
