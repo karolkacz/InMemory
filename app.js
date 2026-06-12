@@ -273,5 +273,6 @@ function initVideoPlay() {
                 allowfullscreen>
             </iframe>
         `;
+        videoWrapper.style.position = 'relative';
     });
 }
