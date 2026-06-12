@@ -379,52 +379,45 @@ body.lightbox-open {
 /* Video Section */
 .video-wrapper {
     position: relative;
-    width: 100%;
-    aspect-ratio: 16 / 9;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    background: #000;
-}
-
-.video-poster {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
-    z-index: 5;
-    transition: var(--transition-smooth);
+    display: block;
 }
 
-.video-poster::after {
+.video-wrapper:hover .play-icon-red {
+    background-color: #cc0000;
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(255, 0, 0, 0.6);
+}
+
+.video-wrapper::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: rgba(0, 0, 0, 0.15);
     transition: var(--transition-smooth);
 }
 
-.video-poster:hover::after {
+.video-wrapper:hover::after {
     background: rgba(0, 0, 0, 0.3);
 }
 
+.video-thumbnail {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+}
+
 .custom-play-btn {
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 10;
     background: none;
     border: none;
-    width: 68px;
-    height: 48px;
     cursor: pointer;
     transition: var(--transition-smooth);
 }
@@ -452,10 +445,14 @@ body.lightbox-open {
     margin-left: 4px;
 }
 
-.video-poster:hover .play-icon-red {
-    background-color: #cc0000;
-    transform: scale(1.1);
-    box-shadow: 0 6px 24px rgba(255, 0, 0, 0.6);
+/* Iframe inserted on click */
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
 }
 
 /* Gallery Grid */
