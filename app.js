@@ -100,7 +100,7 @@ function initShareLogic() {
         if (navigator.share) {
             navigator.share({
                 title: pageTitle,
-                text: 'Страница памяти Алексея Петровича Морозова',
+                text: 'Strona pamięci Andrzeja Wiśniewskiego',
                 url: pageUrl
             }).catch(err => {
                 console.log('Error sharing:', err);
@@ -123,7 +123,7 @@ function initShareLogic() {
         const pageUrl = window.location.href;
         navigator.clipboard.writeText(pageUrl).then(() => {
             const originalText = copyBtn.textContent;
-            copyBtn.textContent = 'Ссылка скопирована!';
+            copyBtn.textContent = 'Link skopiowany!';
             copyBtn.style.backgroundColor = '#4CAF50';
             copyBtn.style.color = '#FFFFFF';
             setTimeout(() => {
@@ -132,7 +132,7 @@ function initShareLogic() {
                 copyBtn.style.color = '';
             }, 2000);
         }).catch(err => {
-            console.error('Ошибка копирования: ', err);
+            console.error('Błąd kopiowania: ', err);
         });
     });
 }
@@ -153,10 +153,10 @@ function initLightbox() {
         lightbox.id = 'lightbox';
         lightbox.className = 'lightbox';
         lightbox.innerHTML = `
-            <button class="lightbox-close" aria-label="Закрыть">&times;</button>
-            <button class="lightbox-arrow lightbox-prev" aria-label="Предыдущая">&lsaquo;</button>
-            <img class="lightbox-content" src="" alt="Увеличенное фото">
-            <button class="lightbox-arrow lightbox-next" aria-label="Следующая">&rsaquo;</button>
+            <button class="lightbox-close" aria-label="Zamknij">&times;</button>
+            <button class="lightbox-arrow lightbox-prev" aria-label="Poprzednia">&lsaquo;</button>
+            <img class="lightbox-content" src="" alt="Powiększone zdjęcie">
+            <button class="lightbox-arrow lightbox-next" aria-label="Następna">&rsaquo;</button>
         `;
         document.body.appendChild(lightbox);
     }
