@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 5. Lightbox Gallery with Navigation & Swipes
     initLightbox();
+
+    // 6. Custom Video Play
+    initVideoPlay();
 });
 
 /* Theme Toggle Logic */
@@ -250,4 +253,25 @@ function initLightbox() {
             showImage(currentIndex + 1);
         }
     };
+}
+
+/* Custom Video Play Logic (Clean Custom Poster -> Autoplay YouTube) */
+function initVideoPlay() {
+    const videoWrapper = document.getElementById('video-wrapper');
+    if (!videoWrapper) return;
+
+    const poster = videoWrapper.querySelector('.video-poster');
+    if (!poster) return;
+
+    poster.addEventListener('click', () => {
+        videoWrapper.innerHTML = `
+            <iframe 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+                src="https://www.youtube.com/embed/MllCZ9eZk2I?autoplay=1&rel=0&modestbranding=1" 
+                title="Wspomnienie wideo" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+            </iframe>
+        `;
+    });
 }
