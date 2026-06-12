@@ -229,6 +229,10 @@ function initLightbox() {
         touchStartX = e.changedTouches[0].screenX;
     }, { passive: true });
 
+    lightbox.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+    }, { passive: false });
+
     lightbox.addEventListener('touchend', (e) => {
         touchEndX = e.changedTouches[0].screenX;
         handleSwipe();
