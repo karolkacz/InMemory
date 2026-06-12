@@ -101,14 +101,12 @@
         <!-- Wspomnienie wideo -->
         <section class="section reveal">
             <h2 class="section-title">Wspomnienie wideo</h2>
-            <div class="video-container" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
-                <iframe 
-                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
-                    src="https://www.youtube.com/embed/MllCZ9eZk2I" 
-                    title="Wspomnienie wideo" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen>
-                </iframe>
+            <div id="video-wrapper" class="video-wrapper">
+                <div class="video-poster" style="background-image: url('10.jpg');">
+                    <button class="custom-play-btn" aria-label="Odtwórz wideo">
+                        <div class="play-icon-red"></div>
+                    </button>
+                </div>
             </div>
         </section>
 
