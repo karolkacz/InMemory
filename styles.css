@@ -416,34 +416,60 @@ body.lightbox-open {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 10;
-    background: none;
-    border: none;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 50px;
     cursor: pointer;
-    transition: var(--transition-smooth);
-    pointer-events: none; /* clicks pass to wrapper */
-}
-
-.play-icon-red {
-    width: 68px;
-    height: 48px;
-    background-color: #FF0000;
-    border-radius: 14px;
-    position: relative;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 20px rgba(255, 0, 0, 0.4);
-    transition: var(--transition-smooth);
+    gap: 6px;
+    padding: 18px 28px;
+    color: #ffffff;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
 }
 
-.play-icon-red::before {
-    content: '';
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 10px 0 10px 18px;
-    border-color: transparent transparent transparent #ffffff;
-    margin-left: 4px;
+.play-svg {
+    width: 52px;
+    height: 52px;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.play-label {
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.85;
+}
+
+.video-wrapper.has-poster:hover .custom-play-btn {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.45);
+    transform: translate(-50%, -50%) scale(1.06);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.video-wrapper.has-poster:hover .play-svg {
+    transform: scale(1.05);
+}
+
+[data-theme="dark"] .custom-play-btn {
+    color: #D4AF37;
+    background: rgba(212, 175, 55, 0.1);
+    border-color: rgba(212, 175, 55, 0.3);
+}
+
+[data-theme="dark"] .video-wrapper.has-poster:hover .custom-play-btn {
+    background: rgba(212, 175, 55, 0.2);
+    border-color: rgba(212, 175, 55, 0.5);
 }
 
 /* Iframe fills the wrapper fully — no click interference */
