@@ -255,54 +255,27 @@ function initLightbox() {
     };
 }
 
-/* Custom Video Play Logic — YouTube IFrame API */
+/* Custom Video Play Logic — direct src on click for mobile autoplay */
 function initVideoPlay() {
     const videoWrapper = document.getElementById('video-wrapper');
-    if (!videoWrapper) return;
-
-    videoWrapper.classList.add('has-poster');
+    const frame = document.getElementById('yt-frame');
+    if (!videoWrapper || !frame) return;
 
     videoWrapper.addEventListener('click', () => {
-        // Already activated — don't do anything
-        if (videoWrapper.querySelector('iframe') || document.getElementById('yt-player')) return;
+        // Already playing — ignore click
+        if (videoWrapper.classList.contains('is-playing')) return;
 
-        // Remove poster state
+        // Set iframe src SYNCHRONOUSLY in the click handler
+        // This is treated as a direct user gesture by mobile browsers → autoplay allowed
+        frame.src = 'https://www.youtube.com/embed/MllCZ9eZk2I?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+
+        // Switch to playing state
         videoWrapper.classList.remove('has-poster');
+        videoWrapper.classList.add('is-playing');
         videoWrapper.style.backgroundImage = 'none';
         videoWrapper.style.cursor = 'default';
 
         const btn = videoWrapper.querySelector('.custom-play-btn');
         if (btn) btn.remove();
-
-        // Create player container
-        const playerDiv = document.createElement('div');
-        playerDiv.id = 'yt-player';
-        playerDiv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;';
-        videoWrapper.appendChild(playerDiv);
-
-        function createPlayer() {
-            new YT.Player('yt-player', {
-                videoId: 'MllCZ9eZk2I',
-                playerVars: {
-                    autoplay: 1,
-                    rel: 0,
-                    modestbranding: 1,
-                    playsinline: 1   /* Critical for iOS — plays inline, not fullscreen */
-                },
-                events: {
-                    onReady: (e) => e.target.playVideo()
-                }
-            });
-        }
-
-        // Load YouTube API script once, then create player
-        if (window.YT && window.YT.Player) {
-            createPlayer();
-        } else {
-            window.onYouTubeIframeAPIReady = createPlayer;
-            const script = document.createElement('script');
-            script.src = 'https://www.youtube.com/iframe_api';
-            document.head.appendChild(script);
-        }
     });
 }
