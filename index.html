@@ -101,7 +101,12 @@
         <!-- Wspomnienie wideo -->
         <section class="section reveal">
             <h2 class="section-title">Wspomnienie wideo</h2>
-            <div id="video-wrapper" class="video-wrapper" style="background-image: url('10.jpg');">
+            <div id="video-wrapper" class="video-wrapper has-poster" style="background-image: url('10.jpg');">
+                <iframe id="yt-frame"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen
+                    class="yt-frame-hidden">
+                </iframe>
                 <button class="custom-play-btn" aria-label="Odtwórz wideo">
                     <svg class="play-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
