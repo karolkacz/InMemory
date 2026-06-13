@@ -379,35 +379,35 @@ body.lightbox-open {
 /* Video Section */
 .video-wrapper {
     position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    background-color: #000;
+    background-size: cover;
+    background-position: center;
     cursor: pointer;
-    display: block;
 }
 
-.video-wrapper:hover .play-icon-red {
-    background-color: #cc0000;
-    transform: scale(1.1);
-    box-shadow: 0 6px 24px rgba(255, 0, 0, 0.6);
-}
-
-.video-wrapper::after {
+/* Dark overlay on poster */
+.video-wrapper.has-poster::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(0, 0, 0, 0.15);
+    background: rgba(0, 0, 0, 0.2);
     transition: var(--transition-smooth);
+    z-index: 1;
 }
 
-.video-wrapper:hover::after {
-    background: rgba(0, 0, 0, 0.3);
+.video-wrapper.has-poster:hover::before {
+    background: rgba(0, 0, 0, 0.35);
 }
 
-.video-thumbnail {
-    width: 100%;
-    display: block;
-    border-radius: 12px;
+.video-wrapper.has-poster:hover .play-icon-red {
+    background-color: #cc0000;
+    transform: scale(1.1);
+    box-shadow: 0 6px 24px rgba(255, 0, 0, 0.6);
 }
 
 .custom-play-btn {
@@ -420,6 +420,7 @@ body.lightbox-open {
     border: none;
     cursor: pointer;
     transition: var(--transition-smooth);
+    pointer-events: none; /* clicks pass to wrapper */
 }
 
 .play-icon-red {
@@ -445,14 +446,14 @@ body.lightbox-open {
     margin-left: 4px;
 }
 
-/* Iframe inserted on click */
+/* Iframe fills the wrapper fully — no click interference */
 .video-wrapper iframe {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     border: 0;
+    cursor: auto;
 }
 
 /* Gallery Grid */
