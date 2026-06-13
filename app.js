@@ -255,7 +255,28 @@ function initLightbox() {
     };
 }
 
-/* Custom Video Play Logic — direct src on click for mobile autoplay */
+/* Custom Video Play Logic — YouTube Player API to bypass double tap on mobile */
+let ytPlayer = null;
+
+// Dynamically load YouTube IFrame Player API
+(function loadYouTubeAPI() {
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+})();
+
+// Global callback called by YouTube API when ready
+window.onYouTubeIframeAPIReady = function() {
+    ytPlayer = new YT.Player('yt-frame', {
+        events: {
+            'onReady': () => {
+                console.log('YouTube Player is ready');
+            }
+        }
+    });
+};
+
 function initVideoPlay() {
     const videoWrapper = document.getElementById('video-wrapper');
     const frame = document.getElementById('yt-frame');
@@ -265,9 +286,18 @@ function initVideoPlay() {
         // Already playing — ignore click
         if (videoWrapper.classList.contains('is-playing')) return;
 
-        // Set iframe src SYNCHRONOUSLY in the click handler
-        // This is treated as a direct user gesture by mobile browsers → autoplay allowed
-        frame.src = 'https://www.youtube.com/embed/MllCZ9eZk2I?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+        // Try to play via YouTube API
+        if (ytPlayer && typeof ytPlayer.playVideo === 'function') {
+            try {
+                ytPlayer.playVideo();
+            } catch (e) {
+                console.error("Failed to play video via YT API, falling back to src change:", e);
+                frame.src = 'https://www.youtube.com/embed/MllCZ9eZk2I?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+            }
+        } else {
+            // Fallback if API is not loaded/ready yet
+            frame.src = 'https://www.youtube.com/embed/MllCZ9eZk2I?autoplay=1&rel=0&modestbranding=1&playsinline=1';
+        }
 
         // Switch to playing state
         videoWrapper.classList.remove('has-poster');
