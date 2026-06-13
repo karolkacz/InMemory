@@ -260,20 +260,28 @@ function initVideoPlay() {
     const videoWrapper = document.getElementById('video-wrapper');
     if (!videoWrapper) return;
 
-    videoWrapper.addEventListener('click', () => {
-        const img = videoWrapper.querySelector('.video-thumbnail');
-        const wrapperHeight = img ? img.offsetHeight : videoWrapper.offsetHeight;
+    // Mark as poster mode
+    videoWrapper.classList.add('has-poster');
 
-        videoWrapper.style.height = wrapperHeight + 'px';
-        videoWrapper.style.position = 'relative';
-        videoWrapper.innerHTML = `
-            <iframe 
-                src="https://www.youtube.com/embed/MllCZ9eZk2I?autoplay=1&rel=0&modestbranding=1" 
-                title="Wspomnienie wideo" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen
-                style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;">
-            </iframe>
-        `;
+    videoWrapper.addEventListener('click', () => {
+        // Don't restart if video is already playing
+        if (videoWrapper.querySelector('iframe')) return;
+
+        // Remove poster mode
+        videoWrapper.classList.remove('has-poster');
+        videoWrapper.style.backgroundImage = 'none';
+        videoWrapper.style.cursor = 'default';
+
+        // Remove the play button
+        const btn = videoWrapper.querySelector('.custom-play-btn');
+        if (btn) btn.remove();
+
+        // Insert YouTube iframe
+        const iframe = document.createElement('iframe');
+        iframe.src = 'https://www.youtube.com/embed/MllCZ9eZk2I?autoplay=1&rel=0&modestbranding=1';
+        iframe.title = 'Wspomnienie wideo';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        videoWrapper.appendChild(iframe);
     });
 }
