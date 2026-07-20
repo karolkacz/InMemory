@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Prezentacja InMemory — Cyfrowa Pamięć</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #faf8f5;
+            --text-color: #2c2a29;
+            --accent-gold: #b8943f;
+            --accent-gold-hover: #c9a84c;
+            --border-color: #e5e0d8;
+            --card-bg: #ffffff;
+            --slide-transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121110;
+            --text-color: #e5e2dd;
+            --accent-gold: #c9a84c;
+            --accent-gold-hover: #dfbd66;
+            --border-color: #2a2826;
+            --card-bg: #1c1a19;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.4s ease, color 0.4s ease;
+        }
+
+                /* Site Header Navbar */
+        .site-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: rgba(250, 248, 245, 0.96);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        [data-theme="dark"] .site-header {
+            background: rgba(18, 17, 16, 0.96);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 12px;
+            width: 100%;
+        }
+
+        /* Logo — Navbar */
+        .nav-logo-link {
+            display: block;
+            text-decoration: none;
+        }
+
+        .nav-logo-text {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: #B8943F;
+            transition: opacity 0.4s ease;
+            line-height: 1;
+        }
+
+        [data-theme="dark"] .nav-logo-text {
+            color: #ffffff;
+        }
+
+        .nav-logo-link:hover .nav-logo-text {
+            opacity: 0.75;
+        }
+
+        /* Theme Toggle Button */
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 8px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            touch-action: none;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Presentation Container — LARGER SLIDES */
+        .presentation-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 70px;
+            padding-bottom: 60px;
+        }
+
+        .slide {
+            position: absolute;
+            width: 95%;
+            max-width: 1280px;
+            height: 85%;
+            max-height: 760px;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(100px);
+            transition: var(--slide-transition);
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 40px;
+            align-items: center;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
+
+        [data-theme="dark"] .slide {
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateX(0);
+        }
+
+        .slide.prev {
+            transform: translateX(-100px);
+        }
+
+        /* Typography & Layout elements */
+        .slide-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            text-align: left;
+            height: 100%;
+        }
+
+        .slide-tag {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--accent-gold);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .slide-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .slide-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-color);
+            opacity: 0.85;
+            margin-bottom: 24px;
+        }
+
+        /* Media box with Cover style to expand fully */
+        .slide-media {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            position: relative;
+            background: var(--bg-color);
+        }
+
+        .slide-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .slide.active .slide-media img {
+            transform: scale(1.02);
+        }
+
+        /* Lists */
+        .features-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .features-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 1.05rem;
+            line-height: 1.45;
+        }
+
+        .features-list li::before {
+            content: "✓";
+            color: var(--accent-gold);
+            font-weight: bold;
+            font-size: 1.15rem;
+        }
+
+        /* Full layout option */
+        .slide.full-layout {
+            grid-template-columns: 1fr;
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        .slide.full-layout .slide-info {
+            align-items: center;
+        }
+
+        /* Navigation Buttons */
+        .nav-nav-btns {
+            position: absolute;
+            bottom: 25px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            z-index: 10;
+            touch-action: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        .btn-nav {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+            touch-action: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-nav:hover {
+            border-color: var(--accent-gold);
+            color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+
+        .slide-counter {
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0.6;
+        }
+
+        /* Full Screen Media Slide */
+        .slide.full-media-layout {
+            grid-template-columns: 1fr;
+            padding: 0;
+            overflow: hidden;
+            border: none;
+        }
+        .slide.full-media-layout .slide-media {
+            border-radius: 24px;
+            border: none;
+        }
+
+        /* Pricing Page Columns */
+        .pricing-cols {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .pricing-card {
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .pricing-card.premium {
+            border-color: var(--accent-gold);
+            box-shadow: 0 8px 30px rgba(184, 148, 63, 0.05);
+            position: relative;
+        }
+
+        .pricing-card.premium::before {
+            content: "РЕКОМЕНДУЕМ";
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: var(--accent-gold);
+            color: #fff;
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 10px;
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-card-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .pricing-card-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        .pricing-features {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+
+        .pricing-features li {
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+        }
+
+        .pricing-features li::before {
+            content: "•";
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        /* Native Offer Table Styles */
+        .offer-table-container {
+            width: 100%;
+            overflow-x: auto;
+            background: #ffffff;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 15px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .offer-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: inherit;
+            text-align: center;
+            min-width: 900px;
+        }
+        .offer-table th {
+            background-color: #0b2240;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            padding: 14px 8px;
+            border: 1px solid #1e293b;
+            letter-spacing: 0.03em;
+        }
+        .offer-table td {
+            padding: 16px 8px;
+            border: 1px solid #e2e8f0;
+            color: #0f172a;
+            vertical-align: middle;
+        }
+        .offer-table tr:nth-child(even) td {
+            background-color: #f8fafc;
+        }
+        .offer-table .plan-num {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #0b2240;
+            line-height: 1;
+        }
+        .offer-table .plan-name {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #0b2240;
+            margin-bottom: 10px;
+        }
+        .offer-table .price-val {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: #0b2240;
+        }
+        .offer-table .price-val.gold {
+            color: #cf9834;
+        }
+        .offer-table .features-cell {
+            text-align: left;
+            padding-left: 20px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: #334155;
+        }
+        .offer-table .features-cell ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .offer-table .features-cell li {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .offer-table .features-cell li.unchecked {
+            color: #94a3b8;
+            opacity: 0.65;
+        }
+        .offer-footer {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 15px;
+            width: 100%;
+        }
+        .offer-footer-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8fafc;
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            flex: 1;
+            font-size: 0.85rem;
+            color: #334155;
+            text-align: left;
+        }
+        .qr-badge-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            border: 1.5px solid #0b2240;
+            background: #ffffff;
+            flex-shrink: 0;
+        }
+        .qr-badge-box.gold {
+            border-color: #cf9834;
+            background: #fffdf5;
+        }
+
+        /* =============================================
+           ROBUST MOBILE LAYOUT — all phones covered
+           ============================================= */
+        @media (max-width: 900px) {
+            html, body {
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+                overflow-y: hidden;
+                height: 100dvh;
+            }
+
+            /* Presentation wrapper */
+            .presentation-container {
+                position: fixed;
+                top: 70px;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+
+            /* Slide base — fits between header and nav buttons */
+            .slide {
+                position: absolute;
+                top: 8px;
+                bottom: 64px;
+                left: 8px;
+                right: 8px;
+                width: auto;
+                height: auto;
+                max-height: none;
+                grid-template-columns: minmax(0, 1fr);
+                grid-template-rows: minmax(0, 1.1fr) minmax(0, 0.9fr);
+                gap: 10px;
+                padding: 12px;
+                overflow: hidden;
+            }
+
+            /* Pricing slide — allow internal scroll */
+            .slide[style*="overflow-y: auto"] {
+                overflow-y: auto !important;
+                -webkit-overflow-scrolling: touch;
+                grid-template-rows: none;
+            }
+
+            /* Text: scale with viewport height using clamp */
+            .slide-tag {
+                font-size: clamp(0.65rem, 1.5vh, 0.8rem);
+                margin-bottom: clamp(2px, 0.5vh, 6px);
+            }
+            .slide-title {
+                font-size: clamp(1.15rem, 3.5vh, 1.6rem);
+                margin-bottom: clamp(4px, 1vh, 8px);
+                line-height: 1.2;
+            }
+            .slide-description {
+                font-size: clamp(0.78rem, 2vh, 0.92rem);
+                line-height: 1.3;
+                margin-bottom: clamp(4px, 1.2vh, 10px);
+            }
+            .features-list {
+                gap: clamp(4px, 1vh, 8px);
+            }
+            .features-list li {
+                font-size: clamp(0.76rem, 1.8vh, 0.9rem);
+                line-height: 1.2;
+            }
+            .features-list li::before {
+                font-size: clamp(0.85rem, 2vh, 1rem);
+            }
+
+            /* Slide info block */
+            .slide-info {
+                width: 100%;
+                min-width: 0;
+                min-height: 0;
+                overflow: hidden;
+                justify-content: flex-start;
+                height: auto;
+            }
+
+            /* Media block */
+            .slide-media {
+                width: 100%;
+                min-height: 0;
+                max-height: none;
+                padding: 0;
+                margin: 0;
+                border: none;
+                border-radius: 12px;
+                overflow: hidden;
+            }
+            .slide-media img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                border-radius: 12px;
+            }
+
+            /* Nav buttons */
+            .nav-nav-btns {
+                position: absolute;
+                bottom: 10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: auto;
+                z-index: 20;
+            }
+            .btn-nav {
+                width: clamp(34px, 8vw, 44px);
+                height: clamp(34px, 8vw, 44px);
+                font-size: clamp(0.85rem, 2vw, 1.1rem);
+            }
+
+            /* Pricing cards */
+            .pricing-cols {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            .pricing-card {
+                padding: 10px;
+            }
+            .pricing-card-title {
+                font-size: clamp(0.85rem, 2.5vw, 1.05rem);
+            }
+            .pricing-card-price {
+                font-size: clamp(1.1rem, 4vw, 1.5rem);
+            }
+
+            /* Table */
+            .offer-table-container {
+                zoom: 0.45;
+                overflow-x: hidden;
+                margin-top: 10px;
+            }
+            .offer-table {
+                min-width: 850px;
+            }
+            .offer-footer {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .offer-footer-card {
+                min-width: 0;
+                width: 100%;
+            }
+        }
+
+        /* Telegram Webview Warning Banner */
+        .tg-banner {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #0b2240;
+            color: #ffffff;
+            z-index: 99999;
+            padding: 14px 20px;
+            font-size: 0.88rem;
+            line-height: 1.4;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-bottom: 2px solid var(--accent-gold);
+            animation: slideDown 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .tg-banner-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1200px;
+            margin: 0 auto;
+            gap: 15px;
+        }
+        .tg-banner-text {
+            flex: 1;
+            font-weight: 500;
+        }
+        .tg-banner-close {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .tg-banner-close:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        /* Offset presentation top padding when banner is visible */
+        body.tg-active .top-bar {
+            top: 70px;
+        }
+        body.tg-active .presentation-container {
+            padding-top: 130px;
+        }
+        @media (max-width: 600px) {
+            body.tg-active .top-bar {
+                top: 86px;
+            }
+            body.tg-active .presentation-container {
+                padding-top: 146px;
+            }
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- Telegram Helper Banner -->
+    <div id="telegram-banner" class="tg-banner">
+        <div class="tg-banner-container">
+            <div class="tg-banner-text">
+                📱 <strong>Dla najlepszego działania:</strong> kliknij <strong>•••</strong> w prawym górnym rogu i wybierz <strong>"Otwórz w Safari"</strong>.
+            </div>
+            <button class="tg-banner-close" onclick="closeTGBanner()">Rozumiem</button>
+        </div>
+    </div>
+
+    <!-- Top Bar -->
+    <!-- Навигационная панель (Header) -->
+    <header class="site-header">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo-link" aria-label="In Memory">
+                <span class="nav-logo-text">In Memory</span>
+            </a>
+            <button id="theme-toggle-btn" class="theme-toggle" aria-label="Przełącz motyw graficzny">
+                Tryb ciemny
+            </button>
+        </div>
+    </header>
+
+    <!-- Presentation slides -->
+    <main class="presentation-container">
+
+        <!-- Slide 1: Welcome -->
+        <div class="slide active">
+            <div class="slide-info">
+                <span class="slide-tag">InMemory · Polska</span>
+                <h1 class="slide-title">Cyfrowa pamięć na każdym nagrobku</h1>
+                <p class="slide-description">Montujemy tabliczki QR na nagrobkach, które otwierają osobistą stronę upamiętniającą ze zdjęciami, filmami i historią życia.</p>
+                <ul class="features-list">
+                    <li>Tabliczki metalowe i plastikowe do trwałego montażu na zewnątrz.</li>
+                    <li>Indywidualna strona pamięci bez daty ważności.</li>
+                </ul>
+            </div>
+            <div class="slide-media">
+                <img src="monument_wide.jpg" alt="Nagrobek z kodem QR">
+            </div>
+        </div>
+
+        <!-- Slide 2: The Core Product -->
+        <div class="slide">
+            <div class="slide-info">
+                <span class="slide-tag">Jak to działa</span>
+                <h1 class="slide-title">Skan — i strona gotowa</h1>
+                <p class="slide-description">Tabliczka z kodem QR jest mocowana do nagrobka. Zeskanowanie dowolnym smartfonem — bez aplikacji — otwiera stronę upamiętniającą.</p>
+                <ul class="features-list">
+                    <li>Działa z każdym smartfonem przez standardową kamerę.</li>
+                    <li>Dostęp do strony — o każdej porze, bezpośrednio przy grobie.</li>
+                    <li>Treść zarządzana przez rodzinę: tryb publiczny lub prywatny.</li>
+                </ul>
+            </div>
+            <div class="slide-media" style="background: none; border: none;">
+                <picture style="width: 100%; height: 100%; display: block;">
+                    <source media="(max-width: 900px)" srcset="card_qr_landscape.jpg">
+                    <img src="card_qr_square.jpg" alt="Wizytówka InMemory" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px; border: 1px solid var(--border-color);">
+                </picture>
+            </div>
+        </div>
+
+        <!-- Slide 3: Durability -->
+        <div class="slide">
+            <div class="slide-info">
+                <span class="slide-tag">Materiały</span>
+                <h1 class="slide-title">Dwa formaty.</h1>
+                <p class="slide-description">Tabliczki są zaprojektowane do stałego montażu na zewnątrz i nie wymagają konserwacji.</p>
+                <ul class="features-list">
+                    <li><strong>Plastik:</strong> Imitacja metalu — wygląd premium, odporny na wilgoć, mróz i promieniowanie UV.</li>
+                    <li><strong>Metal:</strong> Stal nierdzewna z grawerem laserowym. Format premium.</li>
+                    <li>Nie blakną, nie odkształcają się, nie wymagają wymiany.</li>
+                </ul>
+            </div>
+            <div class="slide-media" style="background: none; border: none;">
+                <picture style="width: 100%; height: 100%; display: block;">
+                    <source media="(max-width: 900px)" srcset="monument_qr_landscape.jpg">
+                    <img src="monument_qr_square.jpg" alt="Zbliżenie tabliczki pamiątkowej" style="width: 100%; height: 100%; object-fit: cover; border-radius: 16px; border: 1px solid var(--border-color);">
+                </picture>
+            </div>
+        </div>
+
+        <!-- Slide 5: Cennik — mobile-first toggle design -->
+        <div class="slide" style="grid-template-columns: 1fr; padding: clamp(12px, 2vh, 28px) clamp(10px, 2vw, 20px); overflow-y: auto;">
+            <div style="display: flex; flex-direction: column; width: 100%; max-width: 680px; margin: 0 auto; gap: clamp(10px, 1.8vh, 18px);">
+
+                <!-- Header -->
+                <div>
+                    <span class="slide-tag">Cennik</span>
+                    <h1 class="slide-title" style="font-size: clamp(1.6rem, 4vw, 2.4rem); margin-bottom: 4px; margin-top: 6px;">Wybierz pakiet</h1>
+                    <p style="font-size: 0.9rem; opacity: 0.6; margin: 0;">Cena zależy od wybranego kodu QR</p>
+                </div>
+
+                <!-- QR Toggle -->
+                <div style="display: flex; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 4px; gap: 4px;">
+                    <button onclick="setQR('plastik')" id="btn-plastik"
+                        style="flex: 1; padding: clamp(8px, 1.2vh, 10px) clamp(10px, 2vw, 14px); border-radius: 10px; border: none; cursor: pointer; font-size: clamp(0.75rem, 1.8vh, 0.85rem); font-weight: 700; font-family: inherit; transition: all 0.25s ease; background: #0b2240; color: #fff; box-shadow: 0 2px 8px rgba(11,34,64,0.2); display: flex; align-items: center; justify-content: center; gap: 7px;">
+                        <!-- Shield / plastic icon -->
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2z"/></svg>
+                        Plastikowy QR
+                    </button>
+                    <button onclick="setQR('metal')" id="btn-metal"
+                        style="flex: 1; padding: clamp(8px, 1.2vh, 10px) clamp(10px, 2vw, 14px); border-radius: 10px; border: none; cursor: pointer; font-size: clamp(0.75rem, 1.8vh, 0.85rem); font-weight: 700; font-family: inherit; transition: all 0.25s ease; background: transparent; color: var(--text-color); opacity: 0.5; display: flex; align-items: center; justify-content: center; gap: 7px;">
+                        <!-- Diamond / metal icon -->
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+                        Metalowy QR
+                    </button>
+                </div>
+
+                <!-- Cards grid -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: clamp(8px, 1.5vw, 14px);">
+
+                    <!-- Card: Zwykły -->
+                    <div style="background: var(--card-bg); border: 1.5px solid var(--border-color); border-radius: 20px; padding: clamp(12px, 2vh, 20px) clamp(10px, 2vw, 16px); display: flex; flex-direction: column; gap: clamp(8px, 1.5vh, 12px);">
+                        <div>
+                            <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; opacity: 0.4; margin-bottom: 4px;">Zwykły</div>
+                            <div id="price-zwykly" style="font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 900; color: var(--text-color); line-height: 1; transition: all 0.3s ease;">399 zł</div>
+                            <div id="sub-zwykly" style="font-size: 0.7rem; opacity: 0.45; margin-top: 4px;">z plastikowym QR</div>
+                        </div>
+                        <div style="height: 1px; background: var(--border-color);"></div>
+                        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: clamp(6px, 1vh, 9px);">
+                            <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; line-height: 1.3;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><polyline points="7 12 10.5 15.5 17 9"/></svg>
+                                <span>Strona do 15 zdjęć</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; line-height: 1.3;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><polyline points="7 12 10.5 15.5 17 9"/></svg>
+                                <span>Podstawowy design</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; line-height: 1.3; opacity: 0.3;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                <span>Bezlimitowe zdjęcia</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; line-height: 1.3; opacity: 0.3;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                <span>Rozszerzony design</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; line-height: 1.3; opacity: 0.3;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                <span>Retusz 10 zdjęć</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; line-height: 1.3; opacity: 0.3;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;margin-top:1px"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                <span>Neuro-film</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Card: Premium -->
+                    <div style="background: linear-gradient(155deg, #0b2240 0%, #163554 100%); border: 1.5px solid #1e3f63; border-radius: 20px; padding: clamp(12px, 2vh, 20px) clamp(10px, 2vw, 16px); display: flex; flex-direction: column; gap: clamp(8px, 1.5vh, 12px); position: relative;">
+                        <div style="position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--accent-gold); color: #fff; font-size: 0.62rem; font-weight: 800; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.08em; white-space: nowrap; box-shadow: 0 3px 10px rgba(184,148,63,0.4); display: flex; align-items: center; gap: 4px;">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            Premium
+                        </div>
+                        <div>
+                            <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; color: rgba(255,255,255,0.4); margin-bottom: 4px;">Premium</div>
+                            <div id="price-premium" style="font-size: clamp(1.5rem, 5vw, 2rem); font-weight: 900; color: var(--accent-gold); line-height: 1; transition: all 0.3s ease;">599 zł</div>
+                            <div id="sub-premium" style="font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-top: 4px;">z plastikowym QR</div>
+                        </div>
+                        <div style="height: 1px; background: rgba(255,255,255,0.1);"></div>
+                        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: clamp(6px, 1vh, 9px);">
+                            <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; line-height: 1.3; color: rgba(255,255,255,0.9);">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><polyline points="7 12 10.5 15.5 17 9"/></svg>
+                                <span>Strona do 15 zdjęć</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; line-height: 1.3; color: rgba(255,255,255,0.9);">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><polyline points="7 12 10.5 15.5 17 9"/></svg>
+                                <span>Podstawowy design</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; line-height: 1.3; color: rgba(255,255,255,0.9);">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><polyline points="7 12 10.5 15.5 17 9"/></svg>
+                                <span>Bezlimitowe zdjęcia</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; line-height: 1.3; color: rgba(255,255,255,0.9);">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><polyline points="7 12 10.5 15.5 17 9"/></svg>
+                                <span>Rozszerzony design</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; line-height: 1.3; color: rgba(255,255,255,0.9);">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><polyline points="7 12 10.5 15.5 17 9"/></svg>
+                                <span>Retusz 10 zdjęć</span>
+                            </li>
+                            <li style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.78rem; line-height: 1.3; color: rgba(255,255,255,0.9);">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent-gold)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px"><circle cx="12" cy="12" r="10"/><polyline points="7 12 10.5 15.5 17 9"/></svg>
+                                <span>Neuro-film</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <!-- Info strip -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 34px; height: 34px; background: #0b2240; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2z"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.78rem; font-weight: 700;">Plastikowy QR</div>
+                            <div style="font-size: 0.68rem; opacity: 0.5; margin-top: 1px;">Odporny na pogodę</div>
+                        </div>
+                    </div>
+                    <div style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 34px; height: 34px; background: linear-gradient(135deg, #b8943f, #d4aa5a); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"/></svg>
+                        </div>
+                        <div>
+                            <div style="font-size: 0.78rem; font-weight: 700;">Metalowy QR</div>
+                            <div style="font-size: 0.68rem; opacity: 0.5; margin-top: 1px;">Elegancki, na pomnik</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <script>
+        function setQR(type) {
+            const btnPlastik = document.getElementById('btn-plastik');
+            const btnMetal = document.getElementById('btn-metal');
+            const priceZwykly = document.getElementById('price-zwykly');
+            const pricePremium = document.getElementById('price-premium');
+            const subZwykly = document.getElementById('sub-zwykly');
+            const subPremium = document.getElementById('sub-premium');
+
+            if (type === 'plastik') {
+                btnPlastik.style.background = '#0b2240';
+                btnPlastik.style.color = '#fff';
+                btnPlastik.style.opacity = '1';
+                btnPlastik.style.boxShadow = '0 2px 8px rgba(11,34,64,0.2)';
+                btnMetal.style.background = 'transparent';
+                btnMetal.style.color = 'var(--text-color)';
+                btnMetal.style.opacity = '0.45';
+                btnMetal.style.boxShadow = 'none';
+                priceZwykly.textContent = '399 zł';
+                pricePremium.textContent = '599 zł';
+                subZwykly.textContent = 'z plastikowym QR';
+                subPremium.textContent = 'z plastikowym QR';
+            } else {
+                btnMetal.style.background = '#b8943f';
+                btnMetal.style.color = '#fff';
+                btnMetal.style.opacity = '1';
+                btnMetal.style.boxShadow = '0 2px 8px rgba(184,148,63,0.3)';
+                btnPlastik.style.background = 'transparent';
+                btnPlastik.style.color = 'var(--text-color)';
+                btnPlastik.style.opacity = '0.45';
+                btnPlastik.style.boxShadow = 'none';
+                priceZwykly.textContent = '499 zł';
+                pricePremium.textContent = '699 zł';
+                subZwykly.textContent = 'z metalowym QR';
+                subPremium.textContent = 'z metalowym QR';
+            }
+        }
+        </script>
+
+
+
+        <!-- Slide 6: Partner Program -->
+        <div class="slide">
+            <div class="slide-info">
+                <span class="slide-tag">Program partnerski</span>
+                <h1 class="slide-title">Dla kamieniarzy</h1>
+                <p class="slide-description">Gotowy model współpracy bez inwestycji i wiedzy technicznej.</p>
+                <ul class="features-list">
+                    <li><strong>Prowizja od każdej sprzedaży</strong> — stała, przejrzysta, bez minimalnego progu.</li>
+                    <li><strong>Twoje zadanie — przekazać tabliczkę klientowi.</strong> Reszta — tworzenie strony, uzupełnianie, wsparcie — leży po naszej stronie.</li>
+                    <li><strong>Żadnych wymagań technicznych</strong> — działa jako dodatkowa usługa do Twojej oferty.</li>
+                </ul>
+            </div>
+            <div class="slide-media">
+                <img src="monument_wide.jpg" alt="Współpraca">
+            </div>
+        </div>
+
+        <!-- Slide 7: Contacts -->
+        <div class="slide full-layout">
+            <div class="slide-info">
+                <span class="slide-tag">Kontakt</span>
+                <h1 class="slide-title">Skontaktuj się z nami</h1>
+                <p class="slide-description" style="max-width: 560px; margin-bottom: 30px;">
+                    Jesteśmy gotowi omówić współpracę. Na żądanie wyślemy bezpłatną próbkę tabliczki. Działamy na terenie całej Polski.
+                </p>
+
+                <div style="display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px;">
+                    <div style="display: flex; align-items: center; gap: 12px; font-size: 1.15rem; font-weight: 600;">
+                        <span style="color: var(--accent-gold); font-size: 1.1rem;">📞</span>
+                        <a href="tel:+48733590547" style="color: var(--text-color); text-decoration: none;">+48 733 590 547</a>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px; font-size: 1.15rem; font-weight: 600;">
+                        <span style="color: var(--accent-gold); font-size: 1.1rem;">📞</span>
+                        <a href="tel:+48731575536" style="color: var(--text-color); text-decoration: none;">+48 731 575 536</a>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px; font-size: 1.05rem;">
+                        <span style="color: var(--accent-gold); font-size: 1.1rem;">✉️</span>
+                        <a href="mailto:in.memory.support@gmail.com" style="color: var(--text-color); text-decoration: none; border-bottom: 1px dashed var(--accent-gold);">in.memory.support@gmail.com</a>
+                    </div>
+                </div>
+
+                <p style="font-size: 0.9rem; opacity: 0.5; max-width: 480px;">
+                    Możliwe osobiste spotkanie w Twoim zakładzie.
+                </p>
+            </div>
+        </div>
+
+        <!-- Navigation buttons -->
+        <div class="nav-nav-btns">
+            <button class="btn-nav" id="prev-btn">←</button>
+            <span class="slide-counter" id="counter-txt">1 / 6</span>
+            <button class="btn-nav" id="next-btn">→</button>
+        </div>
+
+    </main>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const counterTxt = document.getElementById('counter-txt');
+        const themeBtn = document.getElementById('theme-btn');
+        
+        let currentSlide = 0;
+
+        function updateSlides() {
+            slides.forEach((slide, idx) => {
+                slide.classList.remove('active', 'prev');
+                if (idx === currentSlide) {
+                    slide.classList.add('active');
+                } else if (idx < currentSlide) {
+                    slide.classList.add('prev');
+                }
+            });
+            counterTxt.textContent = `${currentSlide + 1} / ${slides.length}`;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlides();
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlides();
+            }
+        });
+
+        // Key controls
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    updateSlides();
+                }
+            } else if (e.key === 'ArrowLeft') {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updateSlides();
+                }
+            }
+        });
+
+        // Touch swipe controls
+        let touchStartX = 0;
+        let touchEndX = 0;
+        
+        const presentationContainer = document.querySelector('.presentation-container');
+        
+        presentationContainer.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+        
+        presentationContainer.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        }, { passive: true });
+        
+        function handleSwipe() {
+            const swipeThreshold = 50; // minimum distance in px
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // Swipe left -> Next slide
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    updateSlides();
+                }
+            }
+            if (touchEndX > touchStartX + swipeThreshold) {
+                // Swipe right -> Prev slide
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updateSlides();
+                }
+            }
+        }
+
+        // Dark/Light toggle matching main site
+        const themeToggleBtn = document.getElementById('theme-toggle-btn');
+        if (themeToggleBtn) {
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', currentTheme);
+            updateThemeButtonText(themeToggleBtn, currentTheme);
+
+            themeToggleBtn.addEventListener('click', () => {
+                const theme = document.documentElement.getAttribute('data-theme');
+                const newTheme = theme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeButtonText(themeToggleBtn, newTheme);
+            });
+        }
+
+        function updateThemeButtonText(button, theme) {
+            if (theme === 'dark') {
+                button.innerHTML = `
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707.707M12 8a4 4 0 100 8 4 4 0 000-8z"/></svg>
+                    Tryb dzienny
+                `;
+            } else {
+                button.innerHTML = `
+                    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+                    Tryb nocny
+                `;
+            }
+        }
+
+        // Telegram detector & android auto-opener
+        (function detectTelegram() {
+            const ua = navigator.userAgent || navigator.vendor || window.opera;
+            const isTelegram = ua.indexOf('Telegram') > -1;
+            const isAndroid = /Android/i.test(ua);
+            const isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+            if (isTelegram) {
+                if (isAndroid) {
+                    // Try to force launch Android Chrome externally
+                    const currentUrl = window.location.href.replace(/^https?:\/\//, '');
+                    window.location.href = 'intent://' + currentUrl + '#Intent;scheme=https;package=com.android.chrome;end';
+                } else if (isIOS) {
+                    // Show custom beautiful helper banner on iPhone
+                    document.body.classList.add('tg-active');
+                    document.getElementById('telegram-banner').style.display = 'block';
+                }
+            }
+        })();
+
+        function closeTGBanner() {
+            document.body.classList.remove('tg-active');
+            document.getElementById('telegram-banner').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
